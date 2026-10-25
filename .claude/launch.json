@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "wrangler-preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["wrangler", "--cwd", "./", "dev", "--port", "8788"],
+      "port": 8788
+    },
+    {
+      "name": "vite-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 8080
+    }
+  ]
+}

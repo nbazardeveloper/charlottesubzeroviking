@@ -1,0 +1,219 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { absUrl, DEFAULT_OG_IMAGE, twitterMeta } from "@/lib/seo";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ImagePlaceholder } from "@/components/site/ImagePlaceholder";
+import { SpecialistBrandsBand } from "@/components/site/SpecialistBrandsBand";
+import { listServices } from "@/lib/site.functions";
+import { getServiceIcon, getServiceCategoryIconClassName } from "@/lib/service-category-icons";
+import { FinalCta } from "@/components/site/FinalCta";
+import { BOOKING_URL } from "@/lib/site-data";
+
+// Services that have a dedicated page — clicking anywhere on their card opens
+// it (other cards only have the "Request Service" button).
+const SERVICE_LANDING_PAGES: Record<
+  string,
+  | "/lp/refrigerator-repair"
+  | "/lp/washing-machine-dryer-repair"
+  | "/lp/oven-repair"
+  | "/lp/range-stove-repair"
+  | "/lp/ice-maker-repair"
+  | "/lp/dishwasher-repair"
+  | "/lp/garbage-disposal-repair"
+> = {
+  "garbage-disposal-repair": "/lp/garbage-disposal-repair",
+  "dishwasher-repair": "/lp/dishwasher-repair",
+  "ice-maker-repair": "/lp/ice-maker-repair",
+  "range-stove-repair": "/lp/range-stove-repair",
+  "oven-repair": "/lp/oven-repair",
+  "refrigerator-freezer-repair": "/lp/refrigerator-repair",
+  "washing-machine-dryer-repair": "/lp/washing-machine-dryer-repair",
+};
+
+export const Route = createFileRoute("/services")({
+  head: () => ({
+    meta: [
+      { title: "Appliance Repair Services in Charlotte | Sub-Zero & Viking" },
+      {
+        name: "description",
+        content:
+          "Sub-Zero, Viking and Wolf specialists in Charlotte — refrigerator, range, oven, cooktop and wine cooler repair, plus washer, dryer, dishwasher, microwave, range hood and garbage disposal repair.",
+      },
+      { property: "og:title", content: "Premium Appliance Repair Services" },
+      { property: "og:description", content: "All services we offer across Charlotte." },
+      { property: "og:url", content: absUrl("/services") },
+      { property: "og:image", content: DEFAULT_OG_IMAGE },
+      ...twitterMeta(
+        "Premium Appliance Repair Services",
+        "All services we offer across Charlotte.",
+      ),
+    ],
+    links: [{ rel: "canonical", href: absUrl("/services") }],
+  }),
+  loader: ({ context }) =>
+    context.queryClient.ensureQueryData({ queryKey: ["services"], queryFn: () => listServices() }),
+  component: ServicesPage,
+});
+
+function ServicesPage() {
+  const { data: services = [] } = useQuery({
+    queryKey: ["services"],
+    queryFn: () => listServices(),
+  });
+  const [brand, setBrand] = useState<string | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
+
+  const allBrands = useMemo(
+    () => Array.from(new Set(services.flatMap((s) => s.brands))).sort(),
+    [services],
+  );
+  const allCategories = useMemo(
+    () => Array.from(new Set(services.map((s) => s.category))).sort(),
+    [services],
+  );
+
+  const filtered = services.filter(
+    (s) => (!brand || s.brands.includes(brand)) && (!category || s.category === category),
+  );
+
+  return (
+    <div>
+      <section className="border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-20">
+          <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">Services</h1>
+          <p className="mt-4 max-w-2xl text-muted-foreground">
+            We repair premium residential kitchen appliances and specialize in Sub-Zero, Viking and
+            Wolf — across ranges, stoves, cooktops, ovens and refrigeration. We also service other
+            high-end brands including Thermador, Bosch, Dacor, GE Monogram, Bertazzoni and Blue
+            Star.
+          </p>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            Alongside our high-end specialty, we also repair everyday home appliances — washers,
+            dryers, dishwashers, built-in microwaves, range hoods and garbage disposals.
+          </p>
+        </div>
+      </section>
+
+      <SpecialistBrandsBand />
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-8">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-wrap gap-2">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground mr-2 self-center">
+              Brand:
+            </span>
+            <Button
+              size="sm"
+              variant={brand === null ? "default" : "outline"}
+              onClick={() => setBrand(null)}
+            >
+              All
+            </Button>
+            {allBrands.map((b) => (
+              <Button
+                key={b}
+                size="sm"
+                variant={brand === b ? "default" : "outline"}
+                onClick={() => setBrand(b)}
+              >
+                {b}
+              </Button>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground mr-2 self-center">
+              Category:
+            </span>
+            <Button
+              size="sm"
+              variant={category === null ? "default" : "outline"}
+              onClick={() => setCategory(null)}
+            >
+              All
+            </Button>
+            {allCategories.map((c) => (
+              <Button
+                key={c}
+                size="sm"
+                variant={category === c ? "default" : "outline"}
+                onClick={() => setCategory(c)}
+              >
+                {c}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-10 grid gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((s) => {
+            const CategoryIcon = getServiceIcon(s);
+            const landingHref = SERVICE_LANDING_PAGES[s.slug];
+            return (
+              <div
+                key={s.id}
+                className={`relative flex flex-col rounded-lg border border-border bg-card${
+                  landingHref
+                    ? " transition-all hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg"
+                    : ""
+                }`}
+              >
+                {landingHref ? (
+                  <Link to={landingHref} className="absolute inset-0 z-10 rounded-lg">
+                    <span className="sr-only">{s.title}</span>
+                  </Link>
+                ) : null}
+                <div className="relative">
+                  <ImagePlaceholder
+                    aspect="square"
+                    label={s.title}
+                    src={s.image_url}
+                    alt={`${s.title} — professional appliance repair service`}
+                    className="rounded-b-none"
+                  />
+                  <div className="absolute -bottom-8 left-6 flex h-20 w-20 items-center justify-center rounded-lg border border-border bg-card shadow-sm">
+                    <CategoryIcon
+                      className={`${getServiceCategoryIconClassName(s.category)} text-foreground`}
+                      aria-hidden
+                    />
+                    <span
+                      aria-hidden
+                      className="absolute -bottom-1 h-0.5 w-8 rounded-full bg-accent"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-1 flex-col p-6 pb-8 pt-14">
+                  <div className="flex flex-wrap gap-1">
+                    {s.brands.map((b) => (
+                      <Badge key={b} variant="secondary" className="font-normal">
+                        {b}
+                      </Badge>
+                    ))}
+                  </div>
+                  <h2 className="mt-3 text-lg font-semibold">{s.title}</h2>
+                  <p className="mt-2 flex-1 text-sm text-muted-foreground">{s.short_description}</p>
+                </div>
+                <a
+                  href={BOOKING_URL}
+                  className="absolute -bottom-5 left-6 z-20 inline-flex items-center justify-center rounded-md bg-accent px-5 py-2.5 font-display text-sm font-bold text-accent-foreground shadow-sm transition-colors hover:bg-accent/90"
+                >
+                  Request Service
+                </a>
+              </div>
+            );
+          })}
+          {filtered.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No services match the current filters.</p>
+          ) : null}
+        </div>
+
+        <p className="mt-16 text-center text-sm text-muted-foreground">
+          We provide repair and maintenance only — we do not perform new appliance installations.
+        </p>
+      </section>
+
+      <FinalCta />
+    </div>
+  );
+}

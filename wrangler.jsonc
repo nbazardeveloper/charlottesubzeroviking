@@ -1,0 +1,15 @@
+// Cloudflare Pages deployment config. The site has no database or admin
+// backend, so there are no environment variables or secrets to declare here
+// — the site builds to dist/ (static assets + a dist/_worker.js doing SSR,
+// see vite.config.ts's "cloudflare-pages" nitro preset).
+//
+// Cloudflare Pages dashboard "Configure builds" fields (Git integration):
+//   Framework preset:       None
+//   Build command:           npm run build
+//   Build output directory:  dist
+//
+// CLI deploy instead: npm run build && npx wrangler pages deploy dist
+{
+  "name": "best-sub-zero-viking-charlotte",
+  "pages_build_output_dir": "dist"
+}
