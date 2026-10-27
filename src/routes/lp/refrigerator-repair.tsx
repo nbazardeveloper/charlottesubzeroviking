@@ -1,6 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Phone, CheckCircle2, Award, BadgeCheck, ShieldCheck, Star } from "lucide-react";
+import {
+  Phone,
+  CheckCircle2,
+  Award,
+  BadgeCheck,
+  ShieldCheck,
+  Star,
+  Info,
+  XCircle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -80,7 +89,7 @@ const ADVANTAGES = [
 const STEPS = [
   {
     step: "01",
-    title: "Call or request a quote",
+    title: "Call or book online",
     body: "Tell us what's wrong and your refrigerator's brand/model — we'll get you on the schedule.",
   },
   {
@@ -118,6 +127,17 @@ const COMPONENT_FIXES = [
   "Control board or display errors",
 ];
 
+// Shown verbatim in the "Please note" block below the brands list, so ad
+// clicks for brands/appliances we don't handle know before they call.
+const NOT_SERVICED =
+  "We do not service LG, Samsung or Liebherr refrigerators, and we do not repair dishwashers, washing machines or dryers. We provide repair and maintenance only — we do not perform new appliance installations.";
+
+const NOT_SERVICED_ITEMS = [
+  "LG, Samsung or Liebherr refrigerators",
+  "Dishwashers, washing machines or dryers",
+  "New appliance installations",
+];
+
 const FAQS = [
   {
     q: "How much is the diagnostic fee?",
@@ -138,6 +158,14 @@ const FAQS = [
   {
     q: "Which refrigerator brands do you repair?",
     a: "Most major brands — from built-in luxury units like Sub-Zero, Viking, Thermador and Miele to everyday brands like Whirlpool, GE, Frigidaire and KitchenAid. We do not service LG, Samsung or Liebherr refrigerators.",
+  },
+  {
+    q: "Do you install new refrigerators?",
+    a: "No. We provide refrigerator repair and maintenance only — we do not perform new appliance installations.",
+  },
+  {
+    q: "Do you repair dishwashers, washers or dryers?",
+    a: "No. This service is for refrigerators, freezers and their ice makers only — we do not repair dishwashers, washing machines or dryers.",
   },
   {
     q: "Is it worth repairing my refrigerator or should I replace it?",
@@ -224,7 +252,7 @@ function RefrigeratorRepairLanding() {
               Charlotte · Same-day service available
             </span>
             <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-              Refrigerator <span className="text-accent">Repair</span>
+              Refrigerator <span className="text-accent">Repair</span> &amp; Maintenance
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
               Fast, honest repair for built-in, French door, side-by-side, top- and bottom-freezer
@@ -277,12 +305,12 @@ function RefrigeratorRepairLanding() {
               </a>
               <a href={BOOKING_URL}>
                 <Button size="lg" variant="outline">
-                  Get a Free Quote
+                  Book Online
                 </Button>
               </a>
             </div>
             <p className="mt-3 text-xs text-muted-foreground">
-              No obligation — same-day response, most repairs finished in one visit.
+              Same-day response, most repairs finished in one visit.
             </p>
           </div>
           <ImagePlaceholder
@@ -328,9 +356,24 @@ function RefrigeratorRepairLanding() {
             </Badge>
           ))}
         </div>
-        <p className="mx-auto mt-4 max-w-lg text-center text-xs text-muted-foreground">
-          We do not service LG, Samsung or Liebherr refrigerators.
-        </p>
+        <div
+          role="note"
+          className="mx-auto mt-8 max-w-2xl rounded-lg border border-border bg-muted/40 p-5"
+        >
+          <p className="flex items-center gap-2 text-sm font-semibold">
+            <Info className="h-4 w-4 flex-shrink-0 text-accent" aria-hidden /> Please note — we do
+            not service:
+          </p>
+          <ul className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
+            {NOT_SERVICED_ITEMS.map((n) => (
+              <li key={n} className="flex items-start gap-2">
+                <XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" aria-hidden />
+                {n}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-muted-foreground">{NOT_SERVICED}</p>
+        </div>
       </section>
 
       {/* WHY CHOOSE US */}
@@ -461,8 +504,8 @@ function RefrigeratorRepairLanding() {
             Get your refrigerator <span className="text-accent">cold again</span>
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-primary-foreground/75">
-            Call now for same-day availability, or request a free quote online. $95 diagnostic —
-            waived when we complete the repair.
+            Call now for same-day availability, or book your visit online. $95 diagnostic — waived
+            when we complete the repair.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a href={telHref}>
@@ -472,7 +515,7 @@ function RefrigeratorRepairLanding() {
             </a>
             <a href={BOOKING_URL}>
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                Get a Free Quote
+                Book Online
               </Button>
             </a>
           </div>
@@ -497,7 +540,7 @@ function RefrigeratorRepairLanding() {
         </a>
         <a href={BOOKING_URL} className="flex-1">
           <Button size="lg" variant="outline" className="w-full">
-            Free Quote
+            Book Online
           </Button>
         </a>
       </div>
