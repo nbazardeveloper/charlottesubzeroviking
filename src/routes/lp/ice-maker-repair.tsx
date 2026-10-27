@@ -69,7 +69,7 @@ const ADVANTAGES = [
 const STEPS = [
   {
     step: "01",
-    title: "Call or request a quote",
+    title: "Call or book online",
     body: "Tell us what's wrong and your ice maker's brand/model and whether it's built-in or inside the fridge — we'll get you on the schedule.",
   },
   {
@@ -270,12 +270,12 @@ function IceMakerRepairLanding() {
               </a>
               <a href={BOOKING_URL}>
                 <Button size="lg" variant="outline">
-                  Get a Free Quote
+                  Book Online
                 </Button>
               </a>
             </div>
             <p className="mt-3 text-xs text-muted-foreground">
-              No obligation — same-day response, most repairs finished in one visit.
+              Same-day response, most repairs finished in one visit.
             </p>
           </div>
           <ImagePlaceholder
@@ -458,8 +458,8 @@ function IceMakerRepairLanding() {
             Get your ice maker <span className="text-accent">working again</span>
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-primary-foreground/75">
-            Call now for same-day availability, or request a free quote online. $95 diagnostic —
-            waived when we complete the repair.
+            Call now for same-day availability, or book your visit online. $95 diagnostic — waived
+            when we complete the repair.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a href={telHref}>
@@ -469,7 +469,7 @@ function IceMakerRepairLanding() {
             </a>
             <a href={BOOKING_URL}>
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                Get a Free Quote
+                Book Online
               </Button>
             </a>
           </div>
@@ -494,7 +494,7 @@ function IceMakerRepairLanding() {
         </a>
         <a href={BOOKING_URL} className="flex-1">
           <Button size="lg" variant="outline" className="w-full">
-            Free Quote
+            Book Online
           </Button>
         </a>
       </div>
