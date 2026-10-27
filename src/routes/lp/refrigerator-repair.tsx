@@ -130,13 +130,9 @@ const COMPONENT_FIXES = [
 // Shown verbatim in the "Please note" block below the brands list, so ad
 // clicks for brands/appliances we don't handle know before they call.
 const NOT_SERVICED =
-  "We do not service LG, Samsung or Liebherr refrigerators, and we do not repair dishwashers, washing machines or dryers. We provide repair and maintenance only — we do not perform new appliance installations.";
+  "We do not service LG, Samsung or Liebherr refrigerators. We provide repair and maintenance only — we do not perform new appliance installations.";
 
-const NOT_SERVICED_ITEMS = [
-  "LG, Samsung or Liebherr refrigerators",
-  "Dishwashers, washing machines or dryers",
-  "New appliance installations",
-];
+const NOT_SERVICED_ITEMS = ["LG, Samsung or Liebherr refrigerators", "New appliance installations"];
 
 const FAQS = [
   {
@@ -162,10 +158,6 @@ const FAQS = [
   {
     q: "Do you install new refrigerators?",
     a: "No. We provide refrigerator repair and maintenance only — we do not perform new appliance installations.",
-  },
-  {
-    q: "Do you repair dishwashers, washers or dryers?",
-    a: "No. This service is for refrigerators, freezers and their ice makers only — we do not repair dishwashers, washing machines or dryers.",
   },
   {
     q: "Is it worth repairing my refrigerator or should I replace it?",
@@ -364,7 +356,7 @@ function RefrigeratorRepairLanding() {
             <Info className="h-4 w-4 flex-shrink-0 text-accent" aria-hidden /> Please note — we do
             not service:
           </p>
-          <ul className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
+          <ul className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
             {NOT_SERVICED_ITEMS.map((n) => (
               <li key={n} className="flex items-start gap-2">
                 <XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" aria-hidden />
