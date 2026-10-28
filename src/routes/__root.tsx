@@ -144,16 +144,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: "/favicon-512.png" },
     ],
     scripts: [
-      // Google Tag Manager — placed first so it loads as high in <head> as
-      // possible, per Google's install instructions. The matching <noscript>
-      // fallback lives in RootShell, right after the opening <body> tag.
-      {
-        children: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-PKFXGLNV');`,
-      },
       // Google Ads tag (AW-18538886791) — Charlotte account.
       { src: "https://www.googletagmanager.com/gtag/js?id=AW-18538886791", async: true },
       {
@@ -192,24 +182,6 @@ document.addEventListener('click', function (e) {
   e.preventDefault();
   gtag_report_conversion(a.getAttribute('href'));
 });`,
-      },
-      // Microsoft Advertising UET (Universal Event Tracking) — lets
-      // Microsoft Advertising see site visits and attribute conversions
-      // (calls, form submissions, etc.) back to Bing/Microsoft Ads clicks.
-      {
-        children: `(function(w,d,t,r,u){
-  var f,n,i;
-  w[u]=w[u]||[],f=function(){
-    var o={ti:"343195501", enableAutoSpaAdTracking:true};
-    o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")
-  },
-  n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){
-    var s=this.readyState;
-    s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)
-  },
-  i=d.getElementsByTagName(t)[0],
-  i.parentNode.insertBefore(n,i)
-})(window,document,"script","https://bat.bing.com/bat.js","uetq");`,
       },
       // GoHighLevel (LeadConnector) chat widget — TODO: this widget id is
       // tied to the original NY business's GHL location, so chats started
@@ -275,14 +247,6 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-PKFXGLNV"
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
         {children}
         <Scripts />
       </body>
