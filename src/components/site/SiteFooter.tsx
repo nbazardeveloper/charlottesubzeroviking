@@ -85,6 +85,15 @@ export function SiteFooter() {
               ) : null}
             </div>
           ) : null}
+          <a
+            href="https://patch.com/north-carolina/charlotte/business/listing/598721/best-sub-zero-viking-service?utm_source=badge&utm_medium=referral&utm_campaign=business_badge"
+            className="mt-5 inline-block"
+          >
+            <img
+              src="https://patch.com/api_v1/bizpost/598721/badge"
+              alt="Best Sub-Zero & Viking Service on Patch"
+            />
+          </a>
         </div>
 
         <div className="min-w-0">
