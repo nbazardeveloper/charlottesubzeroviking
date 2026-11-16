@@ -1,6 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Phone, CheckCircle2, Award, BadgeCheck, ShieldCheck, Star } from "lucide-react";
+import {
+  Phone,
+  CheckCircle2,
+  Award,
+  BadgeCheck,
+  ShieldCheck,
+  Star,
+  Info,
+  XCircle,
+  Clock,
+  MapPin,
+  ExternalLink,
+  CalendarCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -19,7 +32,47 @@ import {
   SameDayIcon,
   WarrantyIcon,
 } from "@/components/site/icons/WhyChooseIcons";
-import { BOOKING_URL } from "@/lib/site-data";
+import { GoogleIcon } from "@/components/site/BrandIcons";
+import { VenmoIcon, ZelleIcon } from "@/components/site/icons/PaymentIcons";
+import { SpecialistBrandsBand } from "@/components/site/SpecialistBrandsBand";
+import { BOOKING_URL, GOOGLE_PROFILE_URL, WORK_MAP_EMBED_URL, WORK_MAP_URL } from "@/lib/site-data";
+
+const PATCH_URL =
+  "https://patch.com/north-carolina/charlotte/business/listing/598721/best-sub-zero-viking-service?utm_source=badge&utm_medium=referral&utm_campaign=business_badge";
+
+const STATS = [
+  { value: "13+", label: "Years of experience" },
+  { value: "8", label: "Premium brands serviced" },
+  { value: "$95", label: "Diagnostic, waived on repair" },
+  { value: "6 mo", label: "Max warranty on parts & labor" },
+];
+
+const GALLERY = [
+  {
+    src: "/images/projects/viking-range-repair-1.webp",
+    alt: "Viking range and oven repair in a Charlotte home",
+    caption: "Viking range & oven",
+  },
+  {
+    src: "/images/projects/viking-range-repair-2.webp",
+    alt: "Viking oven repair in Charlotte",
+    caption: "Viking oven repair",
+  },
+  {
+    src: "/images/projects/viking-range-repair-3.webp",
+    alt: "Viking range oven service in Charlotte",
+    caption: "Viking range service",
+  },
+];
+
+const PAYMENTS = [
+  "Cash",
+  "Credit cards",
+  "Zelle",
+  "Venmo",
+  "Checks",
+  "Invoices for regular clients",
+];
 
 const BRANDS = [
   "Wolf",
@@ -106,6 +159,13 @@ const COMPONENT_FIXES = [
   "Steam oven water system issues",
 ];
 
+// Shown verbatim in the "Please note" block below the brands list, so ad
+// clicks for brands/appliances we don't handle know before they call.
+const NOT_SERVICED =
+  "We provide oven repair and maintenance only — we do not perform new appliance installations.";
+
+const NOT_SERVICED_ITEMS = ["New appliance installations"];
+
 const FAQS = [
   {
     q: "How much is the diagnostic fee?",
@@ -130,6 +190,14 @@ const FAQS = [
   {
     q: "Do you repair both gas and electric ovens?",
     a: "Yes — gas oven repair and electric oven repair for wall ovens, double ovens, convection and steam ovens, and the oven section of ranges.",
+  },
+  {
+    q: "Do you install new ovens?",
+    a: "No. We provide oven repair and maintenance only — we do not perform new appliance installations.",
+  },
+  {
+    q: "Is it worth repairing my oven or should I replace it?",
+    a: "We'll tell you honestly. After diagnosis you get an upfront repair quote, and if the repair doesn't make financial sense for your unit's age and condition, we'll say so.",
   },
 ];
 
@@ -180,12 +248,14 @@ function OvenRepairLanding() {
   const phone = settings?.phone ?? "+1 (888) 988-8790";
   const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
   const rating = settings?.review_rating;
+  const reviewCount = settings?.review_count;
+  const googleUrl = settings?.social_links?.google_reviews ?? GOOGLE_PROFILE_URL;
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
       {/* Slim top bar — logo + click-to-call only, no nav menu. */}
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 md:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
           <Link to="/" className="flex items-center gap-3">
             <img
               src="/images/logo.webp"
@@ -204,108 +274,162 @@ function OvenRepairLanding() {
         </div>
       </header>
 
-      {/* HERO */}
-      <section className="border-b border-border bg-muted/30">
-        <div className="mx-auto grid max-w-5xl gap-10 px-4 py-14 md:grid-cols-2 md:px-8 md:py-20">
-          <div>
-            <span className="inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-accent">
-              Charlotte · Same-day service available
+      {/* HERO — full-bleed photo + left scrim, same treatment as the homepage hero. */}
+      <section className="relative isolate flex min-h-[480px] items-center overflow-hidden border-b border-border md:min-h-[540px]">
+        <ImagePlaceholder
+          fill
+          src="/images/heromobil.webp"
+          desktopSrc="/images/hero.webp"
+          label="Oven repair Charlotte"
+          alt="Luxury kitchen with a professional range and built-in oven"
+          priority
+          className="-z-10"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-gradient-to-r from-black/80 via-black/55 to-black/10 md:from-black/75 md:via-black/35 md:to-transparent"
+        />
+        <div className="relative mx-auto w-full max-w-7xl px-4 py-14 md:px-8 md:py-20">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center rounded-full border border-white/25 bg-black/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
+              Charlotte · Open 24 hours · Same-day service
             </span>
-            <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-              Oven <span className="text-accent">Repair</span>
+            <h1 className="mt-4 max-w-2xl text-balance text-4xl font-semibold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] md:text-5xl">
+              Oven <span className="text-accent">Repair</span> in Charlotte
             </h1>
-            <p className="mt-4 text-lg text-muted-foreground">
-              Fast, honest repair for wall ovens, double ovens, convection, steam and range ovens —
-              gas or electric. Upfront pricing, OEM parts, and a technician who explains the actual
-              problem — not just a bill.
+            <p className="mt-5 max-w-xl text-base text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] md:text-lg">
+              Oven not heating or temperature off? Upfront pricing, OEM parts and a technician who
+              explains the real problem.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <div className="inline-flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3">
-                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-accent/15">
-                  <Award className="h-6 w-6 text-accent" aria-hidden />
-                </div>
+              <div className="inline-flex items-center gap-3 rounded-lg border border-white/20 bg-black/40 px-4 py-3 backdrop-blur-sm">
+                <Award className="h-7 w-7 text-accent" aria-hidden />
                 <div>
-                  <p className="text-lg font-bold leading-none text-foreground">13+ Years</p>
-                  <p className="mt-1 text-xs text-muted-foreground">of hands-on experience</p>
+                  <p className="text-lg font-bold leading-none text-white">13+ Years</p>
+                  <p className="mt-1 text-xs text-white/70">of hands-on experience</p>
                 </div>
               </div>
               {rating ? (
-                <div className="inline-flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3">
-                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-accent/15">
-                    <Star className="h-6 w-6 fill-accent text-accent" aria-hidden />
-                  </div>
+                <a
+                  href={googleUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center gap-3 rounded-lg border border-white/20 bg-black/40 px-4 py-3 backdrop-blur-sm"
+                >
+                  <Star className="h-7 w-7 fill-accent text-accent" aria-hidden />
                   <div>
-                    <p className="text-lg font-bold leading-none text-foreground">
+                    <p className="text-lg font-bold leading-none text-white">
                       {rating.toFixed(1)}★ Rating
                     </p>
-                    <p className="mt-1 text-xs text-muted-foreground">from Charlotte customers</p>
+                    <p className="mt-1 flex items-center gap-1 text-xs text-white/70">
+                      <GoogleIcon className="h-3 w-3" />
+                      {reviewCount ? `${reviewCount} Google reviews` : "Google reviews"}
+                    </p>
                   </div>
-                </div>
-              ) : null}
+                </a>
+              ) : (
+                <a
+                  href={googleUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center gap-3 rounded-lg border border-white/20 bg-black/40 px-4 py-3 backdrop-blur-sm"
+                >
+                  <GoogleIcon className="h-7 w-7" />
+                  <div>
+                    <p className="text-lg font-bold leading-none text-white">Google Business</p>
+                    <p className="mt-1 text-xs text-white/70">Verified profile</p>
+                  </div>
+                </a>
+              )}
             </div>
-
-            <ul className="mt-6 space-y-2 text-sm">
-              {[
-                "Insured & certified technicians",
-                "$95 diagnostic fee — waived when we complete the repair",
-                "OEM or manufacturer-approved parts",
-              ].map((t) => (
-                <li key={t} className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-accent" aria-hidden /> {t}
-                </li>
-              ))}
-            </ul>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <a href={telHref}>
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2 bg-white text-primary hover:bg-white/90">
                   <Phone className="h-4 w-4" /> Call {phone}
                 </Button>
               </a>
               <a href={BOOKING_URL}>
-                <Button size="lg" variant="outline">
+                <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
                   Book Online
                 </Button>
               </a>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">
-              Same-day response, most repairs finished in one visit.
+            <p className="mt-4 text-sm text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+              $95 diagnostic fee —{" "}
+              <span className="font-medium">waived when the repair is completed</span>.
             </p>
           </div>
-          <ImagePlaceholder
-            aspect="video"
-            label="Oven Repair"
-            src="/images/services/oven-repair.webp"
-            alt="Oven repair in Charlotte"
-            priority
-          />
         </div>
       </section>
 
-      {/* TRUST BAND */}
-      <section className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-5xl px-4 py-6 md:px-8">
-          <div className="flex flex-col items-center justify-center gap-4 text-center sm:flex-row sm:gap-0 sm:divide-x sm:divide-primary-foreground/20">
-            {[
-              "Insured & Certified",
-              "13+ Years Experience",
-              "$95 Diagnostic — Waived on Repair",
-              "Warranty on All Work",
-            ].map((t) => (
-              <span
-                key={t}
-                className="flex items-center gap-2 px-4 py-1 text-xs font-semibold uppercase tracking-wide sm:text-[11px]"
-              >
-                <ShieldCheck className="h-4 w-4 flex-shrink-0 text-accent" aria-hidden /> {t}
-              </span>
-            ))}
-          </div>
+      <SpecialistBrandsBand />
+
+      {/* STATS */}
+      <section className="mx-auto max-w-7xl px-4 pt-10 md:px-8">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {STATS.map((st) => (
+            <div key={st.label} className="rounded-lg border border-border bg-card p-5 text-center">
+              <p className="text-3xl font-bold text-accent">{st.value}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{st.label}</p>
+            </div>
+          ))}
         </div>
       </section>
+
+      {/* TRUST ROW */}
+      <section className="mx-auto max-w-7xl px-4 pt-8 md:px-8">
+        <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
+          <GuaranteeBadge />
+          <a href={PATCH_URL} target="_blank" rel="noreferrer noopener">
+            <img
+              src="https://patch.com/api_v1/bizpost/598721/badge"
+              alt="Best Sub-Zero & Viking Service on Patch"
+              loading="lazy"
+              className="h-24 w-auto"
+            />
+          </a>
+        </div>
+      </section>
+
+      {/* GOOGLE PROFILE — star rating/count appear automatically once set in site-data.ts */}
+      {googleUrl ? (
+        <section className="mx-auto max-w-3xl px-4 pt-10 md:px-8">
+          <a
+            href={googleUrl}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex flex-col items-center gap-3 rounded-lg border border-border bg-card p-6 text-center transition-colors hover:border-accent sm:flex-row sm:text-left"
+          >
+            <GoogleIcon className="h-10 w-10 flex-shrink-0" />
+            <div className="flex-1">
+              {rating ? (
+                <p className="flex items-center justify-center gap-2 text-lg font-bold sm:justify-start">
+                  {rating.toFixed(1)}
+                  <span className="flex" aria-hidden>
+                    {[0, 1, 2, 3, 4].map((i) => (
+                      <Star key={i} className="h-5 w-5 fill-accent text-accent" />
+                    ))}
+                  </span>
+                </p>
+              ) : null}
+              <p className="text-sm text-muted-foreground">
+                {reviewCount
+                  ? `Based on ${reviewCount} reviews from Charlotte customers on Google`
+                  : "Find Best Sub-Zero & Viking Service on Google — verified business profile, hours and contacts"}
+              </p>
+            </div>
+            <span className="inline-flex items-center gap-1 text-sm font-semibold text-accent">
+              {reviewCount ? "Read our Google reviews" : "View our Google profile"}{" "}
+              <ExternalLink className="h-4 w-4" aria-hidden />
+            </span>
+          </a>
+        </section>
+      ) : null}
 
       {/* BRANDS */}
-      <section className="mx-auto max-w-5xl px-4 py-10 md:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-8">
         <p className="text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
           Brands we service
         </p>
@@ -316,14 +440,11 @@ function OvenRepairLanding() {
             </Badge>
           ))}
         </div>
-        <p className="mx-auto mt-4 max-w-lg text-center text-xs text-muted-foreground">
-          Don't see your brand? Call us and we'll let you know if we can help.
-        </p>
       </section>
 
       {/* WHY CHOOSE US */}
       <section className="border-y border-border bg-muted/30">
-        <div className="mx-auto max-w-5xl px-4 py-14 md:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-14 md:px-8">
           <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">
             Why Charlotte homeowners <span className="text-accent">choose us</span>
           </h2>
@@ -340,7 +461,7 @@ function OvenRepairLanding() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="mx-auto max-w-5xl px-4 py-14 md:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-14 md:px-8">
         <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">
           How it <span className="text-accent">works</span>
         </h2>
@@ -359,7 +480,7 @@ function OvenRepairLanding() {
 
       {/* WHAT WE FIX */}
       <section className="border-y border-border bg-muted/30">
-        <div className="mx-auto max-w-5xl px-4 py-14 md:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-14 md:px-8">
           <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">
             What we <span className="text-accent">fix</span>
           </h2>
@@ -385,7 +506,7 @@ function OvenRepairLanding() {
             </div>
             <div>
               <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                Door, controls & components
+                Doors, controls & components
               </h3>
               <div className="mt-4 space-y-2">
                 {COMPONENT_FIXES.map((f) => (
@@ -406,8 +527,68 @@ function OvenRepairLanding() {
         </div>
       </section>
 
+      {/* RECENT WORK */}
+      <section className="mx-auto max-w-7xl px-4 py-14 md:px-8">
+        <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">
+          Real repairs in <span className="text-accent">Charlotte homes</span>
+        </h2>
+        <div className="mt-8 grid grid-cols-3 gap-4">
+          {GALLERY.map((g) => (
+            <figure key={g.src} className="overflow-hidden rounded-lg border border-border">
+              <img
+                src={g.src}
+                alt={g.alt}
+                loading="lazy"
+                className="aspect-square w-full object-cover"
+              />
+              <figcaption className="bg-card p-2 text-center text-xs text-muted-foreground">
+                {g.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <div className="mt-6 text-center">
+          <a
+            href={WORK_MAP_URL}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent"
+          >
+            <MapPin className="h-4 w-4" aria-hidden /> See our completed jobs on the map
+          </a>
+        </div>
+      </section>
+
+      {/* HOURS + PAYMENT */}
+      <section className="border-y border-border bg-muted/30">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-12 md:grid-cols-3 md:px-8">
+          <div className="rounded-lg border border-border bg-card p-5">
+            <Clock className="h-6 w-6 text-accent" aria-hidden />
+            <h3 className="mt-3 text-base font-semibold">Open 24 hours</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              We accept requests around the clock — day, night and weekends.
+            </p>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-5">
+            <CalendarCheck className="h-6 w-6 text-accent" aria-hidden />
+            <h3 className="mt-3 text-base font-semibold">Book anytime</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Our online booking form works 24/7 — pick your visit time in a minute.
+            </p>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-5">
+            <div className="flex items-center gap-2 text-accent" aria-hidden>
+              <ZelleIcon className="h-6 w-auto" />
+              <VenmoIcon className="h-6 w-auto" />
+            </div>
+            <h3 className="mt-3 text-base font-semibold">Easy payment</h3>
+            <p className="mt-1 text-sm text-muted-foreground">{PAYMENTS.join(" · ")}</p>
+          </div>
+        </div>
+      </section>
+
       {/* GUARANTEE */}
-      <section className="mx-auto max-w-5xl px-4 py-14 text-center md:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-14 text-center md:px-8">
         <GuaranteeBadge className="mx-auto" />
       </section>
 
@@ -428,25 +609,74 @@ function OvenRepairLanding() {
         </div>
       </section>
 
-      {/* AREAS */}
-      <section className="mx-auto max-w-5xl px-4 py-14 md:px-8">
-        <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">
-          Areas we <span className="text-accent">cover</span>
-        </h2>
-        <ul className="mx-auto mt-6 grid max-w-2xl grid-cols-2 gap-2 text-sm sm:grid-cols-4">
-          {AREAS.map((a) => (
-            <li key={a} className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-accent" aria-hidden /> {a}
-            </li>
-          ))}
-        </ul>
+      {/* SERVICE AREA + COMPLETED JOBS MAP (same as homepage) */}
+      <section className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-20">
+        <div className="grid gap-10 md:grid-cols-2">
+          <div>
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
+              Serving Charlotte <span className="text-accent">homes</span>
+            </h2>
+            <p className="mt-3 max-w-xl text-muted-foreground">
+              We're based in Charlotte and cover Myers Park, Matthews, SouthPark, Ballantyne, Mint
+              Hill, Huntersville and Lake Norman. Every pin on the map is a job we've completed.
+            </p>
+            <ul className="mt-6 grid grid-cols-2 gap-2 text-sm">
+              {AREAS.map((a) => (
+                <li key={a} className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accent" aria-hidden /> {a}
+                </li>
+              ))}
+            </ul>
+            <a
+              href={WORK_MAP_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="mt-6 inline-flex text-sm text-accent hover:underline"
+            >
+              Open our completed jobs map →
+            </a>
+          </div>
+          <div className="h-[420px] overflow-hidden rounded-lg border border-border md:h-[560px]">
+            <iframe
+              title="Map of our completed jobs in the Charlotte area"
+              src={WORK_MAP_EMBED_URL}
+              width="100%"
+              height="100%"
+              className="border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* PLEASE NOTE — kept at the bottom so the hero stays clean */}
+      <section className="mx-auto max-w-7xl px-4 pb-14 md:px-8">
+        <div
+          role="note"
+          className="mx-auto max-w-2xl rounded-lg border border-border bg-muted/40 p-5"
+        >
+          <p className="flex items-center gap-2 text-sm font-semibold">
+            <Info className="h-4 w-4 flex-shrink-0 text-accent" aria-hidden /> Please note — we do
+            not service:
+          </p>
+          <ul className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
+            {NOT_SERVICED_ITEMS.map((n) => (
+              <li key={n} className="flex items-start gap-2">
+                <XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" aria-hidden />
+                {n}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-muted-foreground">{NOT_SERVICED}</p>
+        </div>
       </section>
 
       {/* FINAL CTA */}
       <section className="bg-primary text-primary-foreground">
         <div className="mx-auto max-w-3xl px-4 py-16 text-center md:px-8">
           <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
-            Get your oven <span className="text-accent">cooking again</span>
+            Get your oven <span className="text-accent">heating again</span>
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-primary-foreground/75">
             Call now for same-day availability, or book your visit online. $95 diagnostic — waived
@@ -468,7 +698,7 @@ function OvenRepairLanding() {
       </section>
 
       <footer className="border-t border-border">
-        <div className="mx-auto max-w-5xl px-4 py-6 text-center text-xs text-muted-foreground md:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-6 text-center text-xs text-muted-foreground md:px-8">
           © {new Date().getFullYear()} Best Sub-Zero &amp; Viking Service. Independent appliance
           repair service. Not affiliated with the manufacturers of the brands listed above.
         </div>
