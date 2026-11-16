@@ -9,6 +9,10 @@ import {
   Star,
   Info,
   XCircle,
+  Clock,
+  MapPin,
+  ExternalLink,
+  CalendarCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +32,51 @@ import {
   SameDayIcon,
   WarrantyIcon,
 } from "@/components/site/icons/WhyChooseIcons";
-import { BOOKING_URL } from "@/lib/site-data";
+import { GoogleIcon } from "@/components/site/BrandIcons";
+import { VenmoIcon, ZelleIcon } from "@/components/site/icons/PaymentIcons";
+import { BOOKING_URL, GOOGLE_PROFILE_URL, WORK_MAP_URL } from "@/lib/site-data";
+
+const PATCH_URL =
+  "https://patch.com/north-carolina/charlotte/business/listing/598721/best-sub-zero-viking-service?utm_source=badge&utm_medium=referral&utm_campaign=business_badge";
+
+const STATS = [
+  { value: "13+", label: "Years of experience" },
+  { value: "20", label: "Brands serviced" },
+  { value: "$95", label: "Diagnostic, waived on repair" },
+  { value: "6 mo", label: "Max warranty on parts & labor" },
+];
+
+const GALLERY = [
+  {
+    src: "/images/projects/subzero-built-in-refrigerator-repair-1.webp",
+    alt: "Sub-Zero built-in refrigerator and freezer repair in Charlotte",
+    caption: "Sub-Zero built-in fridge & freezer",
+  },
+  {
+    src: "/images/projects/subzero-side-by-side-refrigerator-repair-1.webp",
+    alt: "Sub-Zero side-by-side refrigerator repair in Charlotte",
+    caption: "Sub-Zero side-by-side",
+  },
+  {
+    src: "/images/projects/built-in-refrigerator-repair-1.webp",
+    alt: "Built-in refrigerator repair in a Charlotte home",
+    caption: "Built-in refrigerator",
+  },
+  {
+    src: "/images/projects/viking-range-refrigerator-repair-1.webp",
+    alt: "Viking refrigerator repair in Charlotte",
+    caption: "Viking refrigerator",
+  },
+];
+
+const PAYMENTS = [
+  "Cash",
+  "Credit cards",
+  "Zelle",
+  "Venmo",
+  "Checks",
+  "Invoices for regular clients",
+];
 
 const BRANDS = [
   "Sub-Zero",
@@ -212,6 +260,8 @@ function RefrigeratorRepairLanding() {
   const phone = settings?.phone ?? "+1 (888) 988-8790";
   const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
   const rating = settings?.review_rating;
+  const reviewCount = settings?.review_count;
+  const googleUrl = settings?.social_links?.google_reviews ?? GOOGLE_PROFILE_URL;
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
@@ -244,12 +294,12 @@ function RefrigeratorRepairLanding() {
               Charlotte · Same-day service available
             </span>
             <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-              Refrigerator <span className="text-accent">Repair</span> &amp; Maintenance
+              Refrigerator &amp; Freezer <span className="text-accent">Repair</span> in Charlotte
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              Fast, honest repair for built-in, French door, side-by-side, top- and bottom-freezer
-              refrigerators. Upfront pricing, OEM parts, and a technician who explains the actual
-              problem — not just a bill.
+              Fridge not cooling, freezer not freezing, leaking or making noise? We repair built-in,
+              French door, side-by-side, top- and bottom-freezer refrigerators — with upfront
+              pricing, OEM parts, and a technician who explains the actual problem, not just a bill.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
@@ -263,7 +313,12 @@ function RefrigeratorRepairLanding() {
                 </div>
               </div>
               {rating ? (
-                <div className="inline-flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3">
+                <a
+                  href={googleUrl ?? undefined}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3"
+                >
                   <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-accent/15">
                     <Star className="h-6 w-6 fill-accent text-accent" aria-hidden />
                   </div>
@@ -271,9 +326,12 @@ function RefrigeratorRepairLanding() {
                     <p className="text-lg font-bold leading-none text-foreground">
                       {rating.toFixed(1)}★ Rating
                     </p>
-                    <p className="mt-1 text-xs text-muted-foreground">from Charlotte customers</p>
+                    <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                      <GoogleIcon className="h-3 w-3" />
+                      {reviewCount ? `${reviewCount} Google reviews` : "Google reviews"}
+                    </p>
                   </div>
-                </div>
+                </a>
               ) : null}
             </div>
 
@@ -282,6 +340,8 @@ function RefrigeratorRepairLanding() {
                 "Insured & certified technicians",
                 "$95 diagnostic fee — waived when we complete the repair",
                 "OEM or manufacturer-approved parts",
+                "Warranty on labor and parts (90 days to 6 months)",
+                "Book online 24/7 — Mon–Sat 8 AM–7 PM service",
               ].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-accent" aria-hidden /> {t}
@@ -304,6 +364,16 @@ function RefrigeratorRepairLanding() {
             <p className="mt-3 text-xs text-muted-foreground">
               Same-day response, most repairs finished in one visit.
             </p>
+            <div className="mt-5 flex flex-wrap items-center gap-4">
+              <GuaranteeBadge />
+              <a href={PATCH_URL} target="_blank" rel="noreferrer noopener">
+                <img
+                  src="https://patch.com/api_v1/bizpost/598721/badge"
+                  alt="Best Sub-Zero & Viking Service on Patch"
+                  loading="lazy"
+                />
+              </a>
+            </div>
           </div>
           <ImagePlaceholder
             aspect="video"
@@ -335,6 +405,53 @@ function RefrigeratorRepairLanding() {
           </div>
         </div>
       </section>
+
+      {/* STATS */}
+      <section className="mx-auto max-w-5xl px-4 pt-10 md:px-8">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {STATS.map((st) => (
+            <div key={st.label} className="rounded-lg border border-border bg-card p-5 text-center">
+              <p className="text-3xl font-bold text-accent">{st.value}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{st.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* GOOGLE PROFILE — star rating/count appear automatically once set in site-data.ts */}
+      {googleUrl ? (
+        <section className="mx-auto max-w-3xl px-4 pt-10 md:px-8">
+          <a
+            href={googleUrl}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex flex-col items-center gap-3 rounded-lg border border-border bg-card p-6 text-center transition-colors hover:border-accent sm:flex-row sm:text-left"
+          >
+            <GoogleIcon className="h-10 w-10 flex-shrink-0" />
+            <div className="flex-1">
+              {rating ? (
+                <p className="flex items-center justify-center gap-2 text-lg font-bold sm:justify-start">
+                  {rating.toFixed(1)}
+                  <span className="flex" aria-hidden>
+                    {[0, 1, 2, 3, 4].map((i) => (
+                      <Star key={i} className="h-5 w-5 fill-accent text-accent" />
+                    ))}
+                  </span>
+                </p>
+              ) : null}
+              <p className="text-sm text-muted-foreground">
+                {reviewCount
+                  ? `Based on ${reviewCount} reviews from Charlotte customers on Google`
+                  : "Find Best Sub-Zero & Viking Service on Google — verified business profile, hours and contacts"}
+              </p>
+            </div>
+            <span className="inline-flex items-center gap-1 text-sm font-semibold text-accent">
+              {reviewCount ? "Read our Google reviews" : "View our Google profile"}{" "}
+              <ExternalLink className="h-4 w-4" aria-hidden />
+            </span>
+          </a>
+        </section>
+      ) : null}
 
       {/* BRANDS */}
       <section className="mx-auto max-w-5xl px-4 py-10 md:px-8">
@@ -449,6 +566,64 @@ function RefrigeratorRepairLanding() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* RECENT WORK */}
+      <section className="mx-auto max-w-5xl px-4 py-14 md:px-8">
+        <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">
+          Real repairs in <span className="text-accent">Charlotte homes</span>
+        </h2>
+        <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {GALLERY.map((g) => (
+            <figure key={g.src} className="overflow-hidden rounded-lg border border-border">
+              <img
+                src={g.src}
+                alt={g.alt}
+                loading="lazy"
+                className="aspect-square w-full object-cover"
+              />
+              <figcaption className="bg-card p-2 text-center text-xs text-muted-foreground">
+                {g.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <div className="mt-6 text-center">
+          <a
+            href={WORK_MAP_URL}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent"
+          >
+            <MapPin className="h-4 w-4" aria-hidden /> See our completed jobs on the map
+          </a>
+        </div>
+      </section>
+
+      {/* HOURS + PAYMENT */}
+      <section className="border-y border-border bg-muted/30">
+        <div className="mx-auto grid max-w-5xl gap-6 px-4 py-12 md:grid-cols-3 md:px-8">
+          <div className="rounded-lg border border-border bg-card p-5">
+            <Clock className="h-6 w-6 text-accent" aria-hidden />
+            <h3 className="mt-3 text-base font-semibold">Working hours</h3>
+            <p className="mt-1 text-sm text-muted-foreground">Mon–Sat: 8:00 AM – 7:00 PM</p>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-5">
+            <CalendarCheck className="h-6 w-6 text-accent" aria-hidden />
+            <h3 className="mt-3 text-base font-semibold">Book anytime</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              24/7 online scheduling — pick your visit time in a minute.
+            </p>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-5">
+            <div className="flex items-center gap-2 text-accent" aria-hidden>
+              <ZelleIcon className="h-6 w-auto" />
+              <VenmoIcon className="h-6 w-auto" />
+            </div>
+            <h3 className="mt-3 text-base font-semibold">Easy payment</h3>
+            <p className="mt-1 text-sm text-muted-foreground">{PAYMENTS.join(" · ")}</p>
           </div>
         </div>
       </section>

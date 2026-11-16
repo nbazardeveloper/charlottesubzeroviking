@@ -22,6 +22,10 @@ export const WORK_MAP_ID = "16hY74LjGSUYpC41daEK8d_7JM7z5-Vc";
 export const WORK_MAP_URL = `https://www.google.com/maps/d/u/0/viewer?mid=${WORK_MAP_ID}&ll=35.17293199961214%2C-80.74606216054687&z=11`;
 export const WORK_MAP_EMBED_URL = `https://www.google.com/maps/d/embed?mid=${WORK_MAP_ID}&ll=35.17293199961214%2C-80.74606216054687&z=11`;
 
+// Google Business Profile ("Share profile" short link). Once the profile has reviews, set review_rating/review_count
+// below and the landing page shows the stars automatically.
+export const GOOGLE_PROFILE_URL = "https://share.google/zgI4sJhJVNkS0nOGs";
+
 // TODO: social_links is still empty — add the real Charlotte Google
 // Reviews/Yelp/Instagram/Facebook/YouTube URLs once you have them.
 export const siteSettings: SiteSettings = {
