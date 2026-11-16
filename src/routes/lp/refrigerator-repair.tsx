@@ -288,7 +288,7 @@ function RefrigeratorRepairLanding() {
       </header>
 
       {/* HERO — full-bleed photo + left scrim, same treatment as the homepage hero. */}
-      <section className="relative isolate flex min-h-[560px] items-center overflow-hidden border-b border-border lg:min-h-[640px]">
+      <section className="relative isolate flex min-h-[480px] items-center overflow-hidden border-b border-border md:min-h-[540px]">
         <ImagePlaceholder
           fill
           src="/images/heromobil.webp"
@@ -307,13 +307,12 @@ function RefrigeratorRepairLanding() {
             <span className="inline-flex items-center rounded-full border border-white/25 bg-black/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
               Charlotte · Open 24 hours · Same-day service
             </span>
-            <h1 className="mt-4 text-balance text-4xl font-semibold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] md:text-5xl">
+            <h1 className="mt-4 max-w-2xl text-balance text-4xl font-semibold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] md:text-5xl">
               Refrigerator &amp; Freezer <span className="text-accent">Repair</span> in Charlotte
             </h1>
-            <p className="mt-5 text-base text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] md:text-lg">
-              Fridge not cooling, freezer not freezing, leaking or making noise? We repair built-in,
-              French door, side-by-side, top- and bottom-freezer refrigerators — with upfront
-              pricing, OEM parts, and a technician who explains the actual problem, not just a bill.
+            <p className="mt-5 max-w-xl text-base text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] md:text-lg">
+              Fridge not cooling or freezer not freezing? Upfront pricing, OEM parts and a
+              technician who explains the real problem.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
@@ -358,20 +357,6 @@ function RefrigeratorRepairLanding() {
               )}
             </div>
 
-            <ul className="mt-6 space-y-2 text-sm text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
-              {[
-                "Insured & certified technicians",
-                "$95 diagnostic fee — waived when we complete the repair",
-                "OEM or manufacturer-approved parts",
-                "Warranty on labor and parts (90 days to 6 months)",
-                "Booking form open 24 hours a day, 7 days a week",
-              ].map((t) => (
-                <li key={t} className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-accent" aria-hidden /> {t}
-                </li>
-              ))}
-            </ul>
-
             <div className="mt-8 flex flex-wrap gap-3">
               <a href={telHref}>
                 <Button size="lg" className="gap-2 bg-white text-primary hover:bg-white/90">
@@ -384,16 +369,10 @@ function RefrigeratorRepairLanding() {
                 </Button>
               </a>
             </div>
-            <div className="mt-6 flex flex-wrap items-center gap-4">
-              <GuaranteeBadge variant="dark" />
-              <a href={PATCH_URL} target="_blank" rel="noreferrer noopener">
-                <img
-                  src="https://patch.com/api_v1/bizpost/598721/badge"
-                  alt="Best Sub-Zero & Viking Service on Patch"
-                  loading="lazy"
-                />
-              </a>
-            </div>
+            <p className="mt-4 text-sm text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+              $95 diagnostic fee —{" "}
+              <span className="font-medium">waived when the repair is completed</span>.
+            </p>
           </div>
         </div>
       </section>
@@ -409,6 +388,21 @@ function RefrigeratorRepairLanding() {
               <p className="mt-1 text-xs text-muted-foreground">{st.label}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* TRUST ROW */}
+      <section className="mx-auto max-w-7xl px-4 pt-8 md:px-8">
+        <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
+          <GuaranteeBadge />
+          <a href={PATCH_URL} target="_blank" rel="noreferrer noopener">
+            <img
+              src="https://patch.com/api_v1/bizpost/598721/badge"
+              alt="Best Sub-Zero & Viking Service on Patch"
+              loading="lazy"
+              className="h-24 w-auto"
+            />
+          </a>
         </div>
       </section>
 
@@ -458,24 +452,6 @@ function RefrigeratorRepairLanding() {
               {b}
             </Badge>
           ))}
-        </div>
-        <div
-          role="note"
-          className="mx-auto mt-8 max-w-2xl rounded-lg border border-border bg-muted/40 p-5"
-        >
-          <p className="flex items-center gap-2 text-sm font-semibold">
-            <Info className="h-4 w-4 flex-shrink-0 text-accent" aria-hidden /> Please note — we do
-            not service:
-          </p>
-          <ul className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-            {NOT_SERVICED_ITEMS.map((n) => (
-              <li key={n} className="flex items-start gap-2">
-                <XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" aria-hidden />
-                {n}
-              </li>
-            ))}
-          </ul>
-          <p className="mt-3 text-xs text-muted-foreground">{NOT_SERVICED}</p>
         </div>
       </section>
 
@@ -684,6 +660,28 @@ function RefrigeratorRepairLanding() {
               referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
+        </div>
+      </section>
+
+      {/* PLEASE NOTE — kept at the bottom so the hero stays clean */}
+      <section className="mx-auto max-w-7xl px-4 pb-14 md:px-8">
+        <div
+          role="note"
+          className="mx-auto max-w-2xl rounded-lg border border-border bg-muted/40 p-5"
+        >
+          <p className="flex items-center gap-2 text-sm font-semibold">
+            <Info className="h-4 w-4 flex-shrink-0 text-accent" aria-hidden /> Please note — we do
+            not service:
+          </p>
+          <ul className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
+            {NOT_SERVICED_ITEMS.map((n) => (
+              <li key={n} className="flex items-start gap-2">
+                <XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" aria-hidden />
+                {n}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-muted-foreground">{NOT_SERVICED}</p>
         </div>
       </section>
 
