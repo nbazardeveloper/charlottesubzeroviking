@@ -34,7 +34,8 @@ import {
 } from "@/components/site/icons/WhyChooseIcons";
 import { GoogleIcon } from "@/components/site/BrandIcons";
 import { VenmoIcon, ZelleIcon } from "@/components/site/icons/PaymentIcons";
-import { BOOKING_URL, GOOGLE_PROFILE_URL, WORK_MAP_URL } from "@/lib/site-data";
+import { SpecialistBrandsBand } from "@/components/site/SpecialistBrandsBand";
+import { BOOKING_URL, GOOGLE_PROFILE_URL, WORK_MAP_EMBED_URL, WORK_MAP_URL } from "@/lib/site-data";
 
 const PATCH_URL =
   "https://patch.com/north-carolina/charlotte/business/listing/598721/best-sub-zero-viking-service?utm_source=badge&utm_medium=referral&utm_campaign=business_badge";
@@ -267,7 +268,7 @@ function RefrigeratorRepairLanding() {
     <div className="min-h-screen bg-background pb-20 md:pb-0">
       {/* Slim top bar — logo + click-to-call only, no nav menu. */}
       <header className="border-b border-border">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 md:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
           <Link to="/" className="flex items-center gap-3">
             <img
               src="/images/logo.webp"
@@ -286,62 +287,84 @@ function RefrigeratorRepairLanding() {
         </div>
       </header>
 
-      {/* HERO */}
-      <section className="border-b border-border bg-muted/30">
-        <div className="mx-auto grid max-w-5xl gap-10 px-4 py-14 md:grid-cols-2 md:px-8 md:py-20">
-          <div>
-            <span className="inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-accent">
-              Charlotte · Same-day service available
+      {/* HERO — full-bleed photo + left scrim, same treatment as the homepage hero. */}
+      <section className="relative isolate flex min-h-[560px] items-center overflow-hidden border-b border-border lg:min-h-[640px]">
+        <ImagePlaceholder
+          fill
+          src="/images/heromobil.webp"
+          desktopSrc="/images/hero.webp"
+          label="Refrigerator repair Charlotte"
+          alt="Luxury kitchen with a built-in stainless steel refrigerator"
+          priority
+          className="-z-10"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-gradient-to-r from-black/80 via-black/55 to-black/10 md:from-black/75 md:via-black/35 md:to-transparent"
+        />
+        <div className="relative mx-auto w-full max-w-7xl px-4 py-14 md:px-8 md:py-20">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center rounded-full border border-white/25 bg-black/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
+              Charlotte · Open 24 hours · Same-day service
             </span>
-            <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
+            <h1 className="mt-4 text-balance text-4xl font-semibold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] md:text-5xl">
               Refrigerator &amp; Freezer <span className="text-accent">Repair</span> in Charlotte
             </h1>
-            <p className="mt-4 text-lg text-muted-foreground">
+            <p className="mt-5 text-base text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] md:text-lg">
               Fridge not cooling, freezer not freezing, leaking or making noise? We repair built-in,
               French door, side-by-side, top- and bottom-freezer refrigerators — with upfront
               pricing, OEM parts, and a technician who explains the actual problem, not just a bill.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <div className="inline-flex items-center gap-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-3">
-                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-accent/15">
-                  <Award className="h-6 w-6 text-accent" aria-hidden />
-                </div>
+              <div className="inline-flex items-center gap-3 rounded-lg border border-white/20 bg-black/40 px-4 py-3 backdrop-blur-sm">
+                <Award className="h-7 w-7 text-accent" aria-hidden />
                 <div>
-                  <p className="text-lg font-bold leading-none text-foreground">13+ Years</p>
-                  <p className="mt-1 text-xs text-muted-foreground">of hands-on experience</p>
+                  <p className="text-lg font-bold leading-none text-white">13+ Years</p>
+                  <p className="mt-1 text-xs text-white/70">of hands-on experience</p>
                 </div>
               </div>
               {rating ? (
                 <a
-                  href={googleUrl ?? undefined}
+                  href={googleUrl}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3"
+                  className="inline-flex items-center gap-3 rounded-lg border border-white/20 bg-black/40 px-4 py-3 backdrop-blur-sm"
                 >
-                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-accent/15">
-                    <Star className="h-6 w-6 fill-accent text-accent" aria-hidden />
-                  </div>
+                  <Star className="h-7 w-7 fill-accent text-accent" aria-hidden />
                   <div>
-                    <p className="text-lg font-bold leading-none text-foreground">
+                    <p className="text-lg font-bold leading-none text-white">
                       {rating.toFixed(1)}★ Rating
                     </p>
-                    <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                    <p className="mt-1 flex items-center gap-1 text-xs text-white/70">
                       <GoogleIcon className="h-3 w-3" />
                       {reviewCount ? `${reviewCount} Google reviews` : "Google reviews"}
                     </p>
                   </div>
                 </a>
-              ) : null}
+              ) : (
+                <a
+                  href={googleUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex items-center gap-3 rounded-lg border border-white/20 bg-black/40 px-4 py-3 backdrop-blur-sm"
+                >
+                  <GoogleIcon className="h-7 w-7" />
+                  <div>
+                    <p className="text-lg font-bold leading-none text-white">Google Business</p>
+                    <p className="mt-1 text-xs text-white/70">Verified profile</p>
+                  </div>
+                </a>
+              )}
             </div>
 
-            <ul className="mt-6 space-y-2 text-sm">
+            <ul className="mt-6 space-y-2 text-sm text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
               {[
                 "Insured & certified technicians",
                 "$95 diagnostic fee — waived when we complete the repair",
                 "OEM or manufacturer-approved parts",
                 "Warranty on labor and parts (90 days to 6 months)",
-                "Book online 24/7 — Mon–Sat 8 AM–7 PM service",
+                "Booking form open 24 hours a day, 7 days a week",
               ].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-accent" aria-hidden /> {t}
@@ -351,21 +374,18 @@ function RefrigeratorRepairLanding() {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <a href={telHref}>
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2 bg-white text-primary hover:bg-white/90">
                   <Phone className="h-4 w-4" /> Call {phone}
                 </Button>
               </a>
               <a href={BOOKING_URL}>
-                <Button size="lg" variant="outline">
+                <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
                   Book Online
                 </Button>
               </a>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">
-              Same-day response, most repairs finished in one visit.
-            </p>
-            <div className="mt-5 flex flex-wrap items-center gap-4">
-              <GuaranteeBadge />
+            <div className="mt-6 flex flex-wrap items-center gap-4">
+              <GuaranteeBadge variant="dark" />
               <a href={PATCH_URL} target="_blank" rel="noreferrer noopener">
                 <img
                   src="https://patch.com/api_v1/bizpost/598721/badge"
@@ -375,39 +395,13 @@ function RefrigeratorRepairLanding() {
               </a>
             </div>
           </div>
-          <ImagePlaceholder
-            aspect="video"
-            label="Refrigerator Repair"
-            src="/images/services/refrigerator-freezer-repair.webp"
-            alt="Refrigerator repair in Charlotte"
-            priority
-          />
         </div>
       </section>
 
-      {/* TRUST BAND */}
-      <section className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-5xl px-4 py-6 md:px-8">
-          <div className="flex flex-col items-center justify-center gap-4 text-center sm:flex-row sm:gap-0 sm:divide-x sm:divide-primary-foreground/20">
-            {[
-              "Insured & Certified",
-              "13+ Years Experience",
-              "$95 Diagnostic — Waived on Repair",
-              "Warranty on All Work",
-            ].map((t) => (
-              <span
-                key={t}
-                className="flex items-center gap-2 px-4 py-1 text-xs font-semibold uppercase tracking-wide sm:text-[11px]"
-              >
-                <ShieldCheck className="h-4 w-4 flex-shrink-0 text-accent" aria-hidden /> {t}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
+      <SpecialistBrandsBand />
 
       {/* STATS */}
-      <section className="mx-auto max-w-5xl px-4 pt-10 md:px-8">
+      <section className="mx-auto max-w-7xl px-4 pt-10 md:px-8">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {STATS.map((st) => (
             <div key={st.label} className="rounded-lg border border-border bg-card p-5 text-center">
@@ -454,7 +448,7 @@ function RefrigeratorRepairLanding() {
       ) : null}
 
       {/* BRANDS */}
-      <section className="mx-auto max-w-5xl px-4 py-10 md:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-8">
         <p className="text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
           Brands we service
         </p>
@@ -487,7 +481,7 @@ function RefrigeratorRepairLanding() {
 
       {/* WHY CHOOSE US */}
       <section className="border-y border-border bg-muted/30">
-        <div className="mx-auto max-w-5xl px-4 py-14 md:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-14 md:px-8">
           <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">
             Why Charlotte homeowners <span className="text-accent">choose us</span>
           </h2>
@@ -504,7 +498,7 @@ function RefrigeratorRepairLanding() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="mx-auto max-w-5xl px-4 py-14 md:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-14 md:px-8">
         <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">
           How it <span className="text-accent">works</span>
         </h2>
@@ -523,7 +517,7 @@ function RefrigeratorRepairLanding() {
 
       {/* WHAT WE FIX */}
       <section className="border-y border-border bg-muted/30">
-        <div className="mx-auto max-w-5xl px-4 py-14 md:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-14 md:px-8">
           <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">
             What we <span className="text-accent">fix</span>
           </h2>
@@ -571,7 +565,7 @@ function RefrigeratorRepairLanding() {
       </section>
 
       {/* RECENT WORK */}
-      <section className="mx-auto max-w-5xl px-4 py-14 md:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-14 md:px-8">
         <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">
           Real repairs in <span className="text-accent">Charlotte homes</span>
         </h2>
@@ -604,17 +598,19 @@ function RefrigeratorRepairLanding() {
 
       {/* HOURS + PAYMENT */}
       <section className="border-y border-border bg-muted/30">
-        <div className="mx-auto grid max-w-5xl gap-6 px-4 py-12 md:grid-cols-3 md:px-8">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-12 md:grid-cols-3 md:px-8">
           <div className="rounded-lg border border-border bg-card p-5">
             <Clock className="h-6 w-6 text-accent" aria-hidden />
-            <h3 className="mt-3 text-base font-semibold">Working hours</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Mon–Sat: 8:00 AM – 7:00 PM</p>
+            <h3 className="mt-3 text-base font-semibold">Open 24 hours</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              We accept requests around the clock — day, night and weekends.
+            </p>
           </div>
           <div className="rounded-lg border border-border bg-card p-5">
             <CalendarCheck className="h-6 w-6 text-accent" aria-hidden />
             <h3 className="mt-3 text-base font-semibold">Book anytime</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              24/7 online scheduling — pick your visit time in a minute.
+              Our online booking form works 24/7 — pick your visit time in a minute.
             </p>
           </div>
           <div className="rounded-lg border border-border bg-card p-5">
@@ -629,7 +625,7 @@ function RefrigeratorRepairLanding() {
       </section>
 
       {/* GUARANTEE */}
-      <section className="mx-auto max-w-5xl px-4 py-14 text-center md:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-14 text-center md:px-8">
         <GuaranteeBadge className="mx-auto" />
       </section>
 
@@ -650,18 +646,45 @@ function RefrigeratorRepairLanding() {
         </div>
       </section>
 
-      {/* AREAS */}
-      <section className="mx-auto max-w-5xl px-4 py-14 md:px-8">
-        <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">
-          Areas we <span className="text-accent">cover</span>
-        </h2>
-        <ul className="mx-auto mt-6 grid max-w-2xl grid-cols-2 gap-2 text-sm sm:grid-cols-4">
-          {AREAS.map((a) => (
-            <li key={a} className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-accent" aria-hidden /> {a}
-            </li>
-          ))}
-        </ul>
+      {/* SERVICE AREA + COMPLETED JOBS MAP (same as homepage) */}
+      <section className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-20">
+        <div className="grid gap-10 md:grid-cols-2">
+          <div>
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
+              Serving Charlotte <span className="text-accent">homes</span>
+            </h2>
+            <p className="mt-3 max-w-xl text-muted-foreground">
+              We're based in Charlotte and cover Myers Park, Matthews, SouthPark, Ballantyne, Mint
+              Hill, Huntersville and Lake Norman. Every pin on the map is a job we've completed.
+            </p>
+            <ul className="mt-6 grid grid-cols-2 gap-2 text-sm">
+              {AREAS.map((a) => (
+                <li key={a} className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accent" aria-hidden /> {a}
+                </li>
+              ))}
+            </ul>
+            <a
+              href={WORK_MAP_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="mt-6 inline-flex text-sm text-accent hover:underline"
+            >
+              Open our completed jobs map →
+            </a>
+          </div>
+          <div className="h-[420px] overflow-hidden rounded-lg border border-border md:h-[560px]">
+            <iframe
+              title="Map of our completed jobs in the Charlotte area"
+              src={WORK_MAP_EMBED_URL}
+              width="100%"
+              height="100%"
+              className="border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
       </section>
 
       {/* FINAL CTA */}
@@ -690,7 +713,7 @@ function RefrigeratorRepairLanding() {
       </section>
 
       <footer className="border-t border-border">
-        <div className="mx-auto max-w-5xl px-4 py-6 text-center text-xs text-muted-foreground md:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-6 text-center text-xs text-muted-foreground md:px-8">
           © {new Date().getFullYear()} Best Sub-Zero &amp; Viking Service. Independent appliance
           repair service. Not affiliated with the manufacturers of the brands listed above.
         </div>
