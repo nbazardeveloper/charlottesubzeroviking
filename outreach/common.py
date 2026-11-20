@@ -80,7 +80,12 @@ def open_sheet(cfg: dict):
 
 def ensure_tabs(sh) -> None:
     """Create the three tabs with headers if they don't exist yet."""
-    existing = {ws.title: ws for ws in sh.worksheets()}
+    worksheets = sh.worksheets()
+    existing = {ws.title: ws for ws in worksheets}
+    # A new spreadsheet has one empty default tab ("Sheet1"/"Лист1"): reuse it as Leads.
+    if LEADS_TAB not in existing and len(worksheets) == 1 and not worksheets[0].get_all_values():
+        worksheets[0].update_title(LEADS_TAB)
+        existing = {LEADS_TAB: worksheets[0]}
     for title, headers in ((LEADS_TAB, LEADS_HEADERS), (SENT_TAB, SENT_HEADERS), (REPLIES_TAB, REPLIES_HEADERS)):
         ws = existing.get(title)
         if ws is None:
