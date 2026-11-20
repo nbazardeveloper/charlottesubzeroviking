@@ -1,0 +1,20 @@
+{
+  "sheet_id": "PASTE_GOOGLE_SHEET_ID_HERE",
+  "service_account_file": "service_account.json",
+
+  "from_name": "Best Sub-Zero & Viking Service",
+  "subject": "Appliance Repair Vendor for {{company}} – Best Sub-Zero & Viking Service",
+  "site_url": "https://subzerovikingcharlotte.com",
+
+  "smtp_host": "smtppro.zoho.com",
+  "smtp_port": 465,
+  "imap_host": "imappro.zoho.com",
+  "imap_port": 993,
+  "sent_folder": "Sent",
+  "inbox_folder": "INBOX",
+
+  "daily_limit": 10,
+  "min_pause_seconds": 60,
+  "max_pause_seconds": 180,
+  "reply_lookback_days": 30
+}

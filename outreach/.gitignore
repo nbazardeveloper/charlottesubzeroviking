@@ -1,0 +1,8 @@
+.env
+config.json
+service_account.json
+*.json.key
+preview.html
+preview.txt
+.venv/
+__pycache__/
