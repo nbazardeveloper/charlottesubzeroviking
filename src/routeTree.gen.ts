@@ -24,7 +24,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicesSlugRouteImport } from './routes/services_.$slug'
 import { Route as ProjectsGalleryRouteImport } from './routes/projects_.gallery'
 import { Route as PostSlugRouteImport } from './routes/post.$slug'
+import { Route as LpWolfRepairRouteImport } from './routes/lp/wolf-repair'
 import { Route as LpWashingMachineDryerRepairRouteImport } from './routes/lp/washing-machine-dryer-repair'
+import { Route as LpVikingRepairRouteImport } from './routes/lp/viking-repair'
+import { Route as LpSubZeroRepairRouteImport } from './routes/lp/sub-zero-repair'
 import { Route as LpRefrigeratorRepairRouteImport } from './routes/lp/refrigerator-repair'
 import { Route as LpRangeStoveRepairRouteImport } from './routes/lp/range-stove-repair'
 import { Route as LpOvenRepairRouteImport } from './routes/lp/oven-repair'
@@ -107,12 +110,27 @@ const PostSlugRoute = PostSlugRouteImport.update({
   path: '/post/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LpWolfRepairRoute = LpWolfRepairRouteImport.update({
+  id: '/lp/wolf-repair',
+  path: '/lp/wolf-repair',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LpWashingMachineDryerRepairRoute =
   LpWashingMachineDryerRepairRouteImport.update({
     id: '/lp/washing-machine-dryer-repair',
     path: '/lp/washing-machine-dryer-repair',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LpVikingRepairRoute = LpVikingRepairRouteImport.update({
+  id: '/lp/viking-repair',
+  path: '/lp/viking-repair',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LpSubZeroRepairRoute = LpSubZeroRepairRouteImport.update({
+  id: '/lp/sub-zero-repair',
+  path: '/lp/sub-zero-repair',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LpRefrigeratorRepairRoute = LpRefrigeratorRepairRouteImport.update({
   id: '/lp/refrigerator-repair',
   path: '/lp/refrigerator-repair',
@@ -163,7 +181,10 @@ export interface FileRoutesByFullPath {
   '/lp/oven-repair': typeof LpOvenRepairRoute
   '/lp/range-stove-repair': typeof LpRangeStoveRepairRoute
   '/lp/refrigerator-repair': typeof LpRefrigeratorRepairRoute
+  '/lp/sub-zero-repair': typeof LpSubZeroRepairRoute
+  '/lp/viking-repair': typeof LpVikingRepairRoute
   '/lp/washing-machine-dryer-repair': typeof LpWashingMachineDryerRepairRoute
+  '/lp/wolf-repair': typeof LpWolfRepairRoute
   '/post/$slug': typeof PostSlugRoute
   '/projects/gallery': typeof ProjectsGalleryRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -187,7 +208,10 @@ export interface FileRoutesByTo {
   '/lp/oven-repair': typeof LpOvenRepairRoute
   '/lp/range-stove-repair': typeof LpRangeStoveRepairRoute
   '/lp/refrigerator-repair': typeof LpRefrigeratorRepairRoute
+  '/lp/sub-zero-repair': typeof LpSubZeroRepairRoute
+  '/lp/viking-repair': typeof LpVikingRepairRoute
   '/lp/washing-machine-dryer-repair': typeof LpWashingMachineDryerRepairRoute
+  '/lp/wolf-repair': typeof LpWolfRepairRoute
   '/post/$slug': typeof PostSlugRoute
   '/projects/gallery': typeof ProjectsGalleryRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -212,7 +236,10 @@ export interface FileRoutesById {
   '/lp/oven-repair': typeof LpOvenRepairRoute
   '/lp/range-stove-repair': typeof LpRangeStoveRepairRoute
   '/lp/refrigerator-repair': typeof LpRefrigeratorRepairRoute
+  '/lp/sub-zero-repair': typeof LpSubZeroRepairRoute
+  '/lp/viking-repair': typeof LpVikingRepairRoute
   '/lp/washing-machine-dryer-repair': typeof LpWashingMachineDryerRepairRoute
+  '/lp/wolf-repair': typeof LpWolfRepairRoute
   '/post/$slug': typeof PostSlugRoute
   '/projects_/gallery': typeof ProjectsGalleryRoute
   '/services_/$slug': typeof ServicesSlugRoute
@@ -238,7 +265,10 @@ export interface FileRouteTypes {
     | '/lp/oven-repair'
     | '/lp/range-stove-repair'
     | '/lp/refrigerator-repair'
+    | '/lp/sub-zero-repair'
+    | '/lp/viking-repair'
     | '/lp/washing-machine-dryer-repair'
+    | '/lp/wolf-repair'
     | '/post/$slug'
     | '/projects/gallery'
     | '/services/$slug'
@@ -262,7 +292,10 @@ export interface FileRouteTypes {
     | '/lp/oven-repair'
     | '/lp/range-stove-repair'
     | '/lp/refrigerator-repair'
+    | '/lp/sub-zero-repair'
+    | '/lp/viking-repair'
     | '/lp/washing-machine-dryer-repair'
+    | '/lp/wolf-repair'
     | '/post/$slug'
     | '/projects/gallery'
     | '/services/$slug'
@@ -286,7 +319,10 @@ export interface FileRouteTypes {
     | '/lp/oven-repair'
     | '/lp/range-stove-repair'
     | '/lp/refrigerator-repair'
+    | '/lp/sub-zero-repair'
+    | '/lp/viking-repair'
     | '/lp/washing-machine-dryer-repair'
+    | '/lp/wolf-repair'
     | '/post/$slug'
     | '/projects_/gallery'
     | '/services_/$slug'
@@ -311,7 +347,10 @@ export interface RootRouteChildren {
   LpOvenRepairRoute: typeof LpOvenRepairRoute
   LpRangeStoveRepairRoute: typeof LpRangeStoveRepairRoute
   LpRefrigeratorRepairRoute: typeof LpRefrigeratorRepairRoute
+  LpSubZeroRepairRoute: typeof LpSubZeroRepairRoute
+  LpVikingRepairRoute: typeof LpVikingRepairRoute
   LpWashingMachineDryerRepairRoute: typeof LpWashingMachineDryerRepairRoute
+  LpWolfRepairRoute: typeof LpWolfRepairRoute
   PostSlugRoute: typeof PostSlugRoute
   ProjectsGalleryRoute: typeof ProjectsGalleryRoute
   ServicesSlugRoute: typeof ServicesSlugRoute
@@ -424,11 +463,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lp/wolf-repair': {
+      id: '/lp/wolf-repair'
+      path: '/lp/wolf-repair'
+      fullPath: '/lp/wolf-repair'
+      preLoaderRoute: typeof LpWolfRepairRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lp/washing-machine-dryer-repair': {
       id: '/lp/washing-machine-dryer-repair'
       path: '/lp/washing-machine-dryer-repair'
       fullPath: '/lp/washing-machine-dryer-repair'
       preLoaderRoute: typeof LpWashingMachineDryerRepairRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lp/viking-repair': {
+      id: '/lp/viking-repair'
+      path: '/lp/viking-repair'
+      fullPath: '/lp/viking-repair'
+      preLoaderRoute: typeof LpVikingRepairRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lp/sub-zero-repair': {
+      id: '/lp/sub-zero-repair'
+      path: '/lp/sub-zero-repair'
+      fullPath: '/lp/sub-zero-repair'
+      preLoaderRoute: typeof LpSubZeroRepairRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lp/refrigerator-repair': {
@@ -495,7 +555,10 @@ const rootRouteChildren: RootRouteChildren = {
   LpOvenRepairRoute: LpOvenRepairRoute,
   LpRangeStoveRepairRoute: LpRangeStoveRepairRoute,
   LpRefrigeratorRepairRoute: LpRefrigeratorRepairRoute,
+  LpSubZeroRepairRoute: LpSubZeroRepairRoute,
+  LpVikingRepairRoute: LpVikingRepairRoute,
   LpWashingMachineDryerRepairRoute: LpWashingMachineDryerRepairRoute,
+  LpWolfRepairRoute: LpWolfRepairRoute,
   PostSlugRoute: PostSlugRoute,
   ProjectsGalleryRoute: ProjectsGalleryRoute,
   ServicesSlugRoute: ServicesSlugRoute,
