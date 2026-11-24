@@ -183,17 +183,10 @@ document.addEventListener('click', function (e) {
   gtag_report_conversion(a.getAttribute('href'));
 });`,
       },
-      // GoHighLevel (LeadConnector) chat widget — TODO: this widget id is
-      // tied to the original NY business's GHL location, so chats started
-      // here would currently route to their CRM/inbox, not a Charlotte one.
-      // Either replace "data-widget-id" with a Charlotte GHL location's own
-      // widget id, or remove this script entirely (lead capture is already
-      // handled by the ProsBuddy booking widget on /contact).
-      {
-        src: "https://widgets.leadconnectorhq.com/loader.js",
-        "data-resources-url": "https://widgets.leadconnectorhq.com/chat-widget/loader.js",
-        "data-widget-id": "6931f74fe96b4e66a8694988",
-      },
+      // The GoHighLevel chat widget was removed: its widget id belonged to the
+      // original NY business's GHL location, so chats routed to their inbox.
+      // To bring chat back, add loader.js with a Charlotte location's own
+      // "data-widget-id". Lead capture is handled by ProsBuddy booking.
       {
         type: "application/ld+json",
         children: JSON.stringify({
