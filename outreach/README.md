@@ -7,7 +7,7 @@
 ## Файлы
 | Файл | Что это |
 |---|---|
-| `template.html`, `template.txt` | Письмо (HTML + текстовая версия). Подстановки: `{{greeting}}`, `{{company}}`, `{{site}}` |
+| `template.html`, `template.txt` | Письмо в «личном» стиле (HTML + текст), используется по умолчанию. `template-newsletter.html` — дизайнерская версия (уходит в «Промоакции»), включается через `"html_template"` в config.json. Подстановки: `{{greeting}}`, `{{company}}`, `{{site}}` |
 | `send_outreach.py` | Отправка писем со статусом `New` |
 | `check_replies.py` | Сбор ответов/отказов/bounce в таблицу |
 | `config.json` | Настройки (ID таблицы, лимиты, серверы Zoho). Шаблон — `config.example.json` |

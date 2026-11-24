@@ -36,7 +36,8 @@ def build_message(cfg: dict, from_addr: str, to_addr: str, subject: str, text: s
     msg["Date"] = formatdate(localtime=True)
     msg["Message-ID"] = make_msgid(domain=c.email_domain(from_addr))
     msg["Reply-To"] = from_addr
-    msg["List-Unsubscribe"] = f"<mailto:{from_addr}?subject=unsubscribe>"
+    # No List-Unsubscribe header: it marks the email as bulk mail (Gmail → Promotions).
+    # Opt-out is offered in the footer instead ("reply unsubscribe").
     msg.set_content(text)
     msg.add_alternative(page, subtype="html")
     return msg
@@ -114,6 +115,10 @@ def main() -> None:
     leads_ws = sh.worksheet(c.LEADS_TAB)
     sent_ws = sh.worksheet(c.SENT_TAB)
     lead_headers, leads = c.read_rows(leads_ws)
+    missing = [h for h in ("Company", "Email", "Status") if h not in lead_headers]
+    if missing:
+        raise SystemExit(f"Leads header row is damaged (missing {missing}; found {lead_headers[:4]}...). "
+                         "Fix row 1 of the Leads tab and run again. Nothing was sent.")
     _, sent_rows = c.read_rows(sent_ws)
 
     sent_today = sum(1 for r in sent_rows if r.get("Date Sent", "").startswith(c.today_str()))
@@ -126,6 +131,10 @@ def main() -> None:
     batch, skipped = pick_batch(leads, sent_rows, remaining)
     for r, reason in skipped:
         print(f"skip  row {r['_row']}: {r.get('Company') or '?'} <{r.get('Email')}> — {reason}")
+    if args.test and not batch:
+        # Nothing queued yet: test with a sample company so the template can be checked anyway.
+        batch = [{"_row": 0, "Company": "Example Property Management", "Contact Name": "",
+                  "Email": args.test, "Notes": ""}]
     print(f"Sent today: {sent_today}/{cfg['daily_limit']}. This run: {len(batch)} email(s).")
     if not batch:
         return
@@ -142,42 +151,44 @@ def main() -> None:
 
     user, password = c.zoho_credentials()
     ctx = ssl.create_default_context()
-    with smtplib.SMTP_SSL(cfg["smtp_host"], cfg.get("smtp_port", 465), context=ctx) as smtp:
-        smtp.login(user, password)
-        for i, r in enumerate(batch):
-            dom = c.email_domain(r["Email"])
-            if c.has_mx(dom) is False:
-                if not args.test:
-                    c.set_cells(leads_ws, lead_headers, r["_row"], {"Status": c.BOUNCED, "Notes": (r.get("Notes", "") + " [no MX record]").strip()})
-                continue
-
-            subject, text, page = c.render(cfg, r.get("Company", ""), r.get("Contact Name", ""))
-            to_addr = args.test or r["Email"]
-            if args.test:
-                subject = f"[TEST → {r['Email']}] {subject}"
-            msg = build_message(cfg, user, to_addr, subject, text, page)
-
-            try:
-                smtp.send_message(msg)
-            except smtplib.SMTPException as e:
-                print(f"FAIL  {to_addr}: {e}")
-                if isinstance(e, smtplib.SMTPRecipientsRefused) and not args.test:
-                    c.set_cells(leads_ws, lead_headers, r["_row"], {"Status": c.BOUNCED, "Notes": (r.get("Notes", "") + f" [refused: {e}]").strip()})
-                continue
-
-            print(f"sent  {to_addr}  |  {subject}")
-            copy_to_sent(cfg, user, password, msg)
-
+    for i, r in enumerate(batch):
+        dom = c.email_domain(r["Email"])
+        if c.has_mx(dom) is False:
             if not args.test:
-                ts = c.now_str()
-                sent_ws.append_row([ts, r.get("Company", ""), r.get("Contact Name", ""), r["Email"], subject, msg["Message-ID"]],
-                                   value_input_option="RAW")
-                c.set_cells(leads_ws, lead_headers, r["_row"], {"Status": c.SENT, "Sent Date": ts})
+                c.set_cells(leads_ws, lead_headers, r["_row"], {"Status": c.BOUNCED, "Notes": (r.get("Notes", "") + " [no MX record]").strip()})
+            continue
 
-            if i < len(batch) - 1:
-                pause = random.randint(int(cfg.get("min_pause_seconds", 60)), int(cfg.get("max_pause_seconds", 180)))
-                print(f"      waiting {pause}s…")
-                time.sleep(pause)
+        subject, text, page = c.render(cfg, r.get("Company", ""), r.get("Contact Name", ""))
+        to_addr = args.test or r["Email"]
+        if args.test:
+            subject = f"[TEST → {r['Email']}] {subject}"
+        msg = build_message(cfg, user, to_addr, subject, text, page)
+
+        # One fresh SMTP connection per email: Zoho drops idle connections during the long pauses.
+        try:
+            with smtplib.SMTP_SSL(cfg["smtp_host"], cfg.get("smtp_port", 465), context=ctx, timeout=60) as smtp:
+                smtp.login(user, password)
+                smtp.send_message(msg)
+        except (smtplib.SMTPException, OSError) as e:
+            print(f"FAIL  {to_addr}: {e}")
+            if isinstance(e, smtplib.SMTPRecipientsRefused) and not args.test:
+                c.set_cells(leads_ws, lead_headers, r["_row"], {"Status": c.BOUNCED, "Notes": (r.get("Notes", "") + f" [refused: {e}]").strip()})
+            continue
+
+        print(f"sent  {to_addr}  |  {subject}")
+        copy_to_sent(cfg, user, password, msg)
+
+        if not args.test:
+            ts = c.now_str()
+            c.retry(sent_ws.append_row,
+                    [ts, r.get("Company", ""), r.get("Contact Name", ""), r["Email"], subject, msg["Message-ID"]],
+                    value_input_option="RAW")
+            c.set_cells(leads_ws, lead_headers, r["_row"], {"Status": c.SENT, "Sent Date": ts})
+
+        if i < len(batch) - 1:
+            pause = random.randint(int(cfg.get("min_pause_seconds", 60)), int(cfg.get("max_pause_seconds", 180)))
+            print(f"      waiting {pause}s…")
+            time.sleep(pause)
 
 
 if __name__ == "__main__":

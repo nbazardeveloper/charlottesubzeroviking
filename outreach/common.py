@@ -83,7 +83,8 @@ def ensure_tabs(sh) -> None:
     worksheets = sh.worksheets()
     existing = {ws.title: ws for ws in worksheets}
     # A new spreadsheet has one empty default tab ("Sheet1"/"Лист1"): reuse it as Leads.
-    if LEADS_TAB not in existing and len(worksheets) == 1 and not worksheets[0].get_all_values():
+    if LEADS_TAB not in existing and len(worksheets) == 1 \
+            and not any(cell.strip() for row in worksheets[0].get_all_values() for cell in row):
         worksheets[0].update_title(LEADS_TAB)
         existing = {LEADS_TAB: worksheets[0]}
     for title, headers in ((LEADS_TAB, LEADS_HEADERS), (SENT_TAB, SENT_HEADERS), (REPLIES_TAB, REPLIES_HEADERS)):
@@ -123,13 +124,26 @@ def read_rows(ws) -> tuple:
     return headers, rows
 
 
+def retry(fn, *args, **kwargs):
+    """Call a Google Sheets API function, retrying a few times on transient errors (e.g. 503)."""
+    import time
+    last = None
+    for attempt in range(6):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as e:  # gspread.exceptions.APIError and network errors
+            last = e
+            time.sleep(3 * (attempt + 1))
+    raise last
+
+
 def set_cells(ws, headers: List[str], row_num: int, updates: Dict[str, str]) -> None:
     data = []
     for name, value in updates.items():
         if name in headers:
             data.append({"range": f"{col_letter(headers.index(name) + 1)}{row_num}", "values": [[value]]})
     if data:
-        ws.batch_update(data)
+        retry(ws.batch_update, data)
 
 
 def email_domain(email: str) -> str:
@@ -188,7 +202,7 @@ def render(cfg: dict, company: str, contact: str) -> tuple:
                 .replace("{{company}}", display_company)
                 .replace("{{site}}", site))
 
-    page = (HERE / "template.html").read_text(encoding="utf-8")
+    page = (HERE / cfg.get("html_template", "template.html")).read_text(encoding="utf-8")
     page = (page.replace("{{greeting}}", html.escape(greeting_for(company, contact)))
                 .replace("{{company}}", html.escape(display_company))
                 .replace("{{site}}", site))
