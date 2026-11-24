@@ -278,10 +278,9 @@ function OvenRepairLanding() {
       <section className="relative isolate flex min-h-[480px] items-center overflow-hidden border-b border-border md:min-h-[540px]">
         <ImagePlaceholder
           fill
-          src="/images/heromobil.webp"
-          desktopSrc="/images/hero.webp"
+          src="/images/services/oven-repair.webp"
           label="Oven repair Charlotte"
-          alt="Luxury kitchen with a professional range and built-in oven"
+          alt="Built-in double wall oven with the door open and a tray of roasted vegetables"
           priority
           className="-z-10"
         />
