@@ -15,6 +15,7 @@ import {
   CalendarCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { OfferBar } from "@/components/site/OfferBar";
 import { Badge } from "@/components/ui/badge";
 import {
   Accordion,
@@ -273,6 +274,7 @@ function OvenRepairLanding() {
           </a>
         </div>
       </header>
+      <OfferBar />
 
       {/* HERO — full-bleed photo + left scrim, same treatment as the homepage hero. */}
       <section className="relative isolate flex min-h-[480px] items-center overflow-hidden border-b border-border md:min-h-[540px]">
@@ -291,7 +293,7 @@ function OvenRepairLanding() {
         <div className="relative mx-auto w-full max-w-7xl px-4 py-14 md:px-8 md:py-20">
           <div className="max-w-2xl">
             <span className="inline-flex items-center rounded-full border border-white/25 bg-black/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
-              Charlotte · Open 24 hours · Same-day service
+              Charlotte · Same-day service · Request 24/7
             </span>
             <h1 className="mt-4 max-w-2xl text-balance text-4xl font-semibold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] md:text-5xl">
               Oven <span className="text-accent">Repair</span> in Charlotte
@@ -563,9 +565,9 @@ function OvenRepairLanding() {
         <div className="mx-auto grid max-w-7xl gap-6 px-4 py-12 md:grid-cols-3 md:px-8">
           <div className="rounded-lg border border-border bg-card p-5">
             <Clock className="h-6 w-6 text-accent" aria-hidden />
-            <h3 className="mt-3 text-base font-semibold">Open 24 hours</h3>
+            <h3 className="mt-3 text-base font-semibold">Request service 24/7</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              We accept requests around the clock — day, night and weekends.
+              Send a request any time, day or night — we confirm your visit time quickly.
             </p>
           </div>
           <div className="rounded-lg border border-border bg-card p-5">

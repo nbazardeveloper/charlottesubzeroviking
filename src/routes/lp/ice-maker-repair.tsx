@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Phone, CheckCircle2, Award, BadgeCheck, ShieldCheck, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { OfferBar } from "@/components/site/OfferBar";
 import { Badge } from "@/components/ui/badge";
 import {
   Accordion,
@@ -208,6 +209,7 @@ function IceMakerRepairLanding() {
           </a>
         </div>
       </header>
+      <OfferBar />
 
       {/* HERO */}
       <section className="border-b border-border bg-muted/30">
